@@ -1,8 +1,23 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import Link from "next/link";
 import { logoutUser } from "../lib/auth";
 
-const Layout = ({ title, children, auth }) => {
+interface User {
+  name?: string;
+  email?: string;
+}
+
+interface AuthProps {
+  user?: User;
+}
+
+interface LayoutProps {
+  title: string;
+  children: ReactNode;
+  auth?: AuthProps;
+}
+
+const Layout: React.FC<LayoutProps> = ({ title, children, auth }) => {
   const { user = {} } = auth || {};
 
   return (

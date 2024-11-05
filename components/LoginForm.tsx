@@ -1,20 +1,29 @@
-import React from "react";
+import React, { ChangeEvent, FormEvent } from "react";
 import { loginUser } from "../lib/auth";
 import Router from "next/router";
 
-class LoginForm extends React.Component {
-  state = {
+interface LoginFormState {
+  email: string;
+  password: string;
+  error: string;
+  isLoading: boolean;
+}
+
+class LoginForm extends React.Component<{}, LoginFormState> {
+  state: LoginFormState = {
     email: "Rey.Padberg@karina.biz",
     password: "ambrose.net",
     error: "",
     isLoading: false,
   };
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    } as unknown as Pick<LoginFormState, keyof LoginFormState>);
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     const { email, password } = this.state;
 
     event.preventDefault();
@@ -26,7 +35,7 @@ class LoginForm extends React.Component {
       .catch(this.showError);
   };
 
-  showError = (err) => {
+  showError = (err: any) => {
     console.error(err);
     const error = (err.response && err.response.data) || err.message;
     this.setState({ error, isLoading: false });
